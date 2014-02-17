@@ -1,0 +1,5 @@
+slang1/bin
+*.vrmo
+*.vsmo
+._slang1
+.*~
