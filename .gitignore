@@ -3,3 +3,6 @@ slang1/bin
 *.vsmo
 ._slang1
 .*~
+*.uo
+*.ui
+

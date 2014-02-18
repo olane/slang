@@ -71,6 +71,42 @@ fun expr_to_vrm_code_list IR1_ESkip            =
             VRM_Label end_label], 
          result_loc)
      end 
+  | expr_to_vrm_code_list (IR1_Op (e1, AST_L1.LAnd, e2)) = 
+    let val (cl1, l1) = expr_to_vrm_code_list e1 
+        and (cl2, l2) = expr_to_vrm_code_list e2 
+        and false_label = new_label ()  
+        and result_loc = new_temp_loc ()  
+        and end_label = new_label ()  
+    in 
+        (cl1 
+         @ [VRM_Ifz(l1, false_label)]
+         @ cl2
+         @ [VRM_Ifz(l2, false_label), 
+            VRM_Set(result_loc, 1), 
+            VRM_Jmp end_label, 
+            VRM_Label false_label,
+            VRM_Set(result_loc, 0),
+            VRM_Label end_label], 
+         result_loc)
+     end 
+  | expr_to_vrm_code_list (IR1_Op (e1, AST_L1.LOr, e2)) = 
+    let val (cl1, l1) = expr_to_vrm_code_list e1 
+        and (cl2, l2) = expr_to_vrm_code_list e2 
+        and true_label = new_label ()  
+        and result_loc = new_temp_loc ()  
+        and end_label = new_label ()  
+    in 
+        (cl1 
+         @ [VRM_Ifp(l1, true_label)]
+         @ cl2
+         @ [VRM_Ifp(l2, true_label), 
+            VRM_Set(result_loc, 0), 
+            VRM_Jmp end_label, 
+            VRM_Label true_label,
+            VRM_Set(result_loc, 1),
+            VRM_Label end_label], 
+         result_loc)
+     end 
   | expr_to_vrm_code_list (IR1_Deref l) = ([], l) 
   | expr_to_vrm_code_list (IR1_EIf(e1, e2, e3)) =  
     let val (cl1, l1) = expr_to_vrm_code_list e1 

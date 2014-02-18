@@ -62,9 +62,17 @@ fun css (Boolean b) = (TEbool, Boolean b)
          val (t2, e2') = css e2
      in 
         if t1 = TEint 
-        then if t2 = TEint 
+        then (
+             if t2 = TEint 
              then (TEint, Op (e1', opr, e2'))
              else type_error ("second expression of " ^ (op_to_string opr) ^ " has type " ^ (type_expr_to_string t2))
+             )
+        else if t1 = TEbool 
+        then (
+             if t2 = TEbool
+             then (TEbool, Op (e1', opr, e2'))
+             else type_error ("second expression of " ^ (op_to_string opr) ^ " has type " ^ (type_expr_to_string t2))
+             )
         else type_error ("first expression of " ^ (op_to_string opr) ^ " has type " ^ (type_expr_to_string t1))
      end 
   | css (If (e1,e2,e3)) = 
