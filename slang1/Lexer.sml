@@ -51,6 +51,8 @@ datatype token =
    | Twhile             (* while       *) 
    | Tdo                (* do          *) 
    | Tprint             (* print       *) 
+   | Tland              (* &&          *) 
+   | Tlor               (* ||          *) 
 
 fun str_to_token s = 
     case s of 
@@ -62,8 +64,10 @@ fun str_to_token s =
     | "begin" => Tbegin
     | "end"   => Tend 
     | "set"   => Tset 
-    | "skip"   => Tskip 
+    | "skip"  => Tskip 
     | "print" => Tprint
+    | "&&"    => Tland
+    | "||"    => Tlor
     |  _      => Tident s
 
 fun get_integer (lex_buf, dl) = 
@@ -95,6 +99,12 @@ fun get_longest_match lex_buf =
        | #">" => (case current_char (advance_pos 1 lex_buf) of 
                   #"=" => (advance_pos 2 lex_buf, Tgteq) 
                 | _ => lex_error "expecting '=' after '>'")
+       | #"&" => (case current_char (advance_pos 1 lex_buf) of 
+                  #"&" => (advance_pos 2 lex_buf, Tland) 
+                | _ => lex_error "expecting '&' after '&'")
+       | #"|" => (case current_char (advance_pos 1 lex_buf) of 
+                  #"|" => (advance_pos 2 lex_buf, Tlor) 
+                | _ => lex_error "expecting '|' after '|'")
        | c => if Char.isDigit c 
               then get_integer (advance_pos 1 lex_buf, [c]) 
               else if Char.isAlpha c 

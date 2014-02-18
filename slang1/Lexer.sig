@@ -25,6 +25,8 @@ datatype token =
    | Twhile             (* while       *) 
    | Tdo                (* do          *) 
    | Tprint             (* print       *) 
+   | Tland              (* &&          *) 
+   | Tlor               (* ||          *) 
 
 type lex_buffer 
 

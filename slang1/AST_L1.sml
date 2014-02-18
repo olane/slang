@@ -8,7 +8,7 @@ Programming Languages (SPL). The small differences are
 *) 
 type loc = string
 
-datatype oper = Plus | Mult | Subt | GTEQ
+datatype oper = Plus | Mult | Subt | GTEQ | LAnd | LOr
 
 datatype unary_oper = Neg | Not  
 
@@ -35,6 +35,8 @@ fun op_to_string Plus = "+"
   | op_to_string Mult = "*"
   | op_to_string Subt = "-"
   | op_to_string GTEQ = ">="
+  | op_to_string LAnd = "&&"
+  | op_to_string LOr  = "||"
                          
 fun ppe pps (Integer n) = PP.add_string pps (Int.toString n)
   | ppe pps (Boolean b) = PP.add_string pps (Bool.toString b)

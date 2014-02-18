@@ -37,6 +37,8 @@ term ::= factor trest
 srest ::=  + term srest
         |  – term srest
         |  >= term srest 
+        |  && term srest 
+        |  || term srest 
         | 
 
 trest ::=  *  factor trest
@@ -258,6 +260,18 @@ and parse_srest lex_buf =
                    val (lex_buf3, sr) = parse_srest lex_buf2
                 in 
                    (lex_buf3, Srest(GTEQ, t, sr))
+                end 
+    | Tland => let val (lex_buf1, _) = consume_next_token lex_buf
+                   val (lex_buf2, t) = parse_term lex_buf1
+                   val (lex_buf3, sr) = parse_srest lex_buf2
+                in 
+                   (lex_buf3, Srest(LAnd, t, sr))
+                end 
+    | Tlor => let val (lex_buf1, _) = consume_next_token lex_buf
+                   val (lex_buf2, t) = parse_term lex_buf1
+                   val (lex_buf3, sr) = parse_srest lex_buf2
+                in 
+                   (lex_buf3, Srest(LOr, t, sr))
                 end 
     | _ => (lex_buf, Srest_null) 
 
